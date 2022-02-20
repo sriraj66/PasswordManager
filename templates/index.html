@@ -1,0 +1,342 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+      integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk="
+      crossorigin="anonymous"
+    />
+    <style>
+      thead tr th {
+        overflow: hidden;
+      }
+      th,
+      tr,
+      td {
+        overflow: hidden;
+        text-align: center;
+        border: 1px solid rgba(14, 0, 0, 0.274);
+      }
+
+      td {
+        padding: 3px;
+      }
+      td:hover,
+      .no:hover {
+        background-color: rgba(0, 110, 255, 0.616);
+        color: white;
+      }
+      .opt:hover {
+        background-color: white;
+      }
+    </style>
+    <!-- card -->
+    <link rel="stylesheet" href="{% static 'css/card.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <title>Password Manager</title>
+  </head>
+  <body>
+    <!-- Nav -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarTogglerDemo03"
+        aria-controls="navbarTogglerDemo03"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="{% url 'index' %}">
+        <h3 style="text-align: left;"><span style="color: #ff0000;"><strong>P</strong></span><em style=" font-size:20px;">assword</em> <span style="color: #ff0000;"><strong>M</strong></span><em style=" font-size:20px;">anager</em></h3>
+      </a>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+          
+          <li class="nav-item active" style="cursor: pointer">
+            <a class="nav-link" data-toggle="modal" data-target="#add">
+              <i class="fa fa-plus" aria-hidden="true"> </i> Add</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"
+              ><div id="MyClockDisplay" class="clock" onload="showTime()"></div
+            ></a>
+          </li>
+          <li class="nav-item active">
+            <a href="/admin/" class="nav-link">Admin</a>
+          </li>
+
+          <li class="nav-item active">
+            <a href="{% url 'logout' %}" style="color: red" class="nav-link"
+              >&nbsp;&nbsp;
+              <i class="fas fa-user-times"></i>&nbsp;&nbsp;logout</a
+            >
+          </li>
+        </ul>
+
+        <form class="form-inline my-2 my-lg-0">
+          <input
+            class="form-control mr-sm-2"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+          />
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+            Search
+          </button>
+        </form>
+      </div>
+    </nav>
+    <!-- end Nav -->
+
+    <!-- alert -->
+    <br />
+    <div class="container-xl">
+      <div
+        id="message"
+        class="alert alert-success alert-dismissible fade show"
+        role="alert"
+      >
+        <strong>Welcome!</strong> You should check in on some of those fields
+        below.
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    <br />
+    <!-- end Alert -->
+
+    <!-- card -->
+
+    <div class="container-fluid">
+      <!--Table-->
+      <table id="table" class="table table-hover table-fixed">
+        <!--Table head-->
+        <thead class="thead">
+          <tr class="table table-hover table-info">
+            <th>S.no</th>
+            <th>Id</th>
+            <th>URL</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Password</th>
+            <th>Notes</th>
+            <th>Options</th>
+          </tr>
+        </thead>
+        <!--Table head-->
+
+        <!--Table body-->
+        <tbody class="tbody">
+          {% for i in '1234567890'|make_list %}{{i.counter}}
+          <tr class="table-center align-center">
+            <th class="no" scope="row">{{i}}</th>
+            <td>343</td>
+            <td>http://127.0.0.1:8000/</td>
+            <td>Gmail</td>
+            <td>SriramRaha@gamil.com</td>
+            <td>Sriram66*</td>
+            <td>For Gmail</td>
+            <td class="opt">
+              <!-- <div class="btn-group bg-transparent" style="height: max-content; width:max-content" role="group"> -->
+              <a
+                type="button"
+                data-toggle="modal"
+                data-target="#edit"
+                data-id="{{i}}"
+                class="btn btn-warning"
+                ><i class="fas fa-edit"></i
+              ></a>
+              <a
+                type="button"
+                data-toggle="modal"
+                data-target="#delete"
+                data-id="{{i}}"
+                class="btn btn-danger"
+                ><i class="fas fa-trash"></i
+              ></a>
+              <!-- </div> -->
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        <!--Table body-->
+      </table>
+      <!--Table-->
+    </div>
+
+    <!-- modals -->
+    <!-- add -->
+    <div
+      class="modal fade"
+      id="add"
+      data-backdrop="static"
+      data-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <form>
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Add Record</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          
+          <div class="modal-body">
+            
+              <div class="container-fluid">
+                <div class="form-outline mb-4">
+                  
+                  <label class="form-label" for="name">Name</label>
+                  <input type="text" id="name" name='name' class="form-control form-control-lg" required />
+                </div>
+
+            
+  
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="submit" class="btn btn-success">
+              <i class="fas fa-plus"></i> Add
+            </button>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- edit -->
+    <div
+      class="modal fade"
+      id="edit"
+      data-backdrop="static"
+      data-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Edit Record</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body"><input type="text" /></div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-warning">
+              <i class="fas fa-edit"></i> Edit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- delete -->
+    <div
+      class="modal fade"
+      id="delete"
+      data-backdrop="static"
+      data-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Delete Record</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">Do you Want To Delete It ?</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-danger">
+              <i class="fas fa-trash"></i> Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End modals -->
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <script>
+      $("#edit").on("show.bs.modal", function (event) {
+        var button = $(event.relatedTarget);
+        var recipient = button.data("id");
+        var modal = $(this);
+        modal.find(".modal-title").text("New message to " + recipient);
+      });
+      $("#delete").on("show.bs.modal", function (event) {
+        var button = $(event.relatedTarget);
+        var recipient = button.data("id");
+        var modal = $(this);
+        modal.find(".modal-title").text("New message to " + recipient);
+      });
+    </script>
+  </body>
+</html>
